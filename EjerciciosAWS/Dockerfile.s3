@@ -1,0 +1,16 @@
+FROM amazonlinux:2023
+
+# Instala AWS CLI v2
+RUN yum install -y unzip less groff tar gzip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && \
+    rm -rf awscliv2.zip aws
+
+WORKDIR /app
+
+# Copia el archivo test.txt
+COPY test.txt .
+
+# Subir test.txt al bucket S3
+CMD ["aws", "s3", "cp", "test.txt", "s3://prueba-bucket-alberto/"]
